@@ -1,0 +1,5 @@
+%syntax-version=1.0.0
+%project=pgdd-ui
+%uri=https://github.com/rustprooflabs/pgdd-ui
+
+001 2020-06-18T16:56:14Z Ryan Lambert <ryan@rustprooflabs.com> # Initial DB components.
