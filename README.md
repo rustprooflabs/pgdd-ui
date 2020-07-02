@@ -2,8 +2,6 @@
 
 User interface to provide a user-friendly, non-SQL interface to the PostgreSQL Data Dictionary (PgDD) extension.
 
-
-
 ## Deployment Instructions
 
 ### DB Development
@@ -82,3 +80,12 @@ env $(cat ~/.pgddui | grep -v ^# | xargs) python run_server.py
 ```
 
 
+## Running locally (Tree View)
+
+```
+pip install -r requirements.txt
+export POSTGRESQL_CONNECTION="{your postgres connection string}"
+python app.py
+```
+
+Then see http://localhost:5000/
