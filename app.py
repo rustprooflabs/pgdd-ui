@@ -27,20 +27,23 @@ def payload():
     nested_dd = []
     for s in schemas:
         print(s)
-        schema_string = f"{s['s_name']} ({s['description']}, {s['size_plus_indexes']})"
+        desc = (": " + s["description"]) if s["description"] else ""
+        schema_string = f"{s['s_name']}{desc} <small>({s['size_plus_indexes']})</small>"
         s_data = {schema_string: []}
         for t in tables:
             if t["s_name"] != s["s_name"]:
                 continue
+            desc = (": " + t["description"]) if t["description"] else ""
             table_string = (
-                f"{t['t_name']} ({t['description']}, {t['size_plus_indexes']})"
+                f"{t['t_name']}{desc} <small>({t['size_plus_indexes']})</small>"
             )
             t_data = {table_string: []}
             for c in columns:
                 if c["t_name"] != t["t_name"] or c["s_name"] != s["s_name"]:
                     continue
+                desc = (": " + c["description"]) if c["description"] else ""
                 column_string = (
-                    f"{c['column_name']} ({c['data_type']}, {c['description']})"
+                    f"{c['column_name']}{desc} <small>({c['data_type']})</small>"
                 )
                 t_data[table_string].append(column_string)
             s_data[schema_string].append(t_data)
