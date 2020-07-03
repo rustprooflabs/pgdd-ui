@@ -79,13 +79,3 @@ cd /path/to/pgdd-ui
 env $(cat ~/.pgddui | grep -v ^# | xargs) python run_server.py
 ```
 
-
-## Running locally (Tree View)
-
-```
-pip install -r requirements.txt
-export POSTGRESQL_CONNECTION="{your postgres connection string}"
-python app.py
-```
-
-Then see http://localhost:5000/

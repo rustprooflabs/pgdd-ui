@@ -59,9 +59,12 @@ else:
 def get_db_string():
     """ Builds the database connection string for regular user access.
 
-    Connection string ultimately derived from environment vars.
+    Connection string ultimately derived from
+    environment vars.
 
-    :return string
+    Returns
+    -------------
+    database_string : str
     """
     app_name = 'pgdd-ui'
     database_string = 'postgresql://{user}:{pw}@{host}:{port}/{dbname}?application_name={app_name}'
