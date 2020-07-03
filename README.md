@@ -6,6 +6,29 @@ User interface to provide a user-friendly, non-SQL interface to the PostgreSQL D
 
 ## Deployment Instructions
 
+### PgDD in Docker
+
+The PgDD extension is packaged in a Docker image
+for easy testing and deployment.
+
+```
+docker pull rustprooflabs/pgdd
+```
+
+The default (`latest`) version uses PostgreSQL 12.
+To pull a specific Postgres version use the tag.
+
+```
+docker pull rustprooflabs/pgdd:pg13-beta2
+```
+
+Run a container with PgDD available, this uses port `6512`.
+
+```
+docker run --name test-pgdd -e POSTGRES_PASSWORD=mysecretpassword -p 6512:5432 -d rustprooflabs/pgdd
+```
+
+
 ### DB Development
 
 The webapp uses functions in the `dd_ui` schema to allow
