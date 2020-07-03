@@ -22,7 +22,7 @@ def get_dataframe(sql_raw):
         Returns False if DB error.
     """
     try:
-        conn = _get_db_conn()
+        conn = get_db_conn()
     except psycopg2.ProgrammingError as err:
         LOGGER.error('Connection (%s) not configured properly.  Err: %s',
                      connection_name,
@@ -36,7 +36,7 @@ def get_dataframe(sql_raw):
     return results
 
 
-def _get_db_conn():
+def get_db_conn():
     """Establishes psycopg2 database connection."""
     db_string = config.DATABASE_STRING
 

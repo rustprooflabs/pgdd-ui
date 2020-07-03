@@ -2,8 +2,6 @@
 
 User interface to provide a user-friendly, non-SQL interface to the PostgreSQL Data Dictionary (PgDD) extension.
 
-
-
 ## Deployment Instructions
 
 ### PgDD in Docker
@@ -103,5 +101,4 @@ source ~/venv/pgdd/bin/activate
 cd /path/to/pgdd-ui
 env $(cat ~/.pgddui | grep -v ^# | xargs) python run_server.py
 ```
-
 
