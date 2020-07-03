@@ -50,11 +50,24 @@ sqitch deploy db:pg://your_db_user@db_host_or_ip/dd_dev
 
 #### DB Roles
 
-See `db/permissions/perms_dd_ui.sql`.
+See `db/permissions/roles.sql`
+and `db/permissions/perms_dd_ui.sql` for
+an example.
 
-Creates Postgres group role `dd_ui` with permissions granted, and `dd_ui_app` login
-role in `dd_ui` group.
+`roles.sql` creates Postgres group role `dd_ui` and `dd_ui_app` login role in `dd_ui` group.
+`perms_dd_ui.sql` applies permissions to group role.
 
+Run once:
+
+```
+psql -d dd_dev -f db/permissions/roles.sql
+```
+
+Run when needed.
+
+```
+psql -d dd_dev -f db/permissions/perms_dd_ui.sql
+```
 
 ### App Development
 
