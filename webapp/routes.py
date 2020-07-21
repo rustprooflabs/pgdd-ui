@@ -6,11 +6,12 @@ from webapp import app, pgdd, db
 LOGGER = logging.getLogger(__name__)
 
 
-@app.route("/")
-def index():
+@app.route("/") # Hard coding default route
+@app.route("/tree")
+def view_tree():
     """Displays tree view of tables within schemas.
     """
-    return render_template("index.html")
+    return render_template("tree.html")
 
 
 @app.route('/<object_type>')
