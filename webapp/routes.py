@@ -1,9 +1,21 @@
 import logging
-from flask import render_template, abort, jsonify
+from flask import render_template, abort, jsonify, request
 import psycopg2.extras
 from webapp import app, pgdd, db
 
 LOGGER = logging.getLogger(__name__)
+
+
+@app.route('/_toggle_system_objects')
+def toggle_system_objects():
+    system_objects = request.args.get('system_objects')
+
+    if system_objects.lower() == 'true':
+        pgdd.set_system_objects(True)
+    else:
+        pgdd.set_system_objects(False)
+
+    return jsonify({'status': 'success'})
 
 
 @app.route("/") # Hard coding default route

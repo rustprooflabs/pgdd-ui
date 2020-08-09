@@ -1,15 +1,27 @@
+import logging
 from flask import session
 from webapp import db
 
 
-def set_system_objects(system_objects=False):
+LOGGER = logging.getLogger(__name__)
+
+
+def set_system_objects(system_objects):
     """Sets system_objects flag in session.
 
     Parameters
     -------------------------
     system_objects : bool
     """
+    msg = f'Setting system_objects session value: {system_objects}'
+    LOGGER.debug(msg)
     session['system_objects'] = system_objects
+    if system_objects:
+        session['system_objects_lower'] = 'true'
+    else:
+        session['system_objects_lower'] = 'false'
+    session.modified = True
+
 
 def get_system_objects():
     """Retrieves system_objects flag in session.
@@ -23,10 +35,13 @@ def get_system_objects():
     """
     system_objects = session.get('system_objects')
     if system_objects is None:
-        set_system_objects()
+        msg = 'system_objects not previously set.  Setting to default.'
+        LOGGER.info(msg)
+        set_system_objects(False)
         system_objects = session.get('system_objects')
 
     return system_objects
+
 
 def get_object_list(object_type, return_format='DataFrame'):
     """Returns the list for objects of `object_type`.
