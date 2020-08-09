@@ -6,11 +6,12 @@ from webapp import app, pgdd, db
 LOGGER = logging.getLogger(__name__)
 
 
-@app.route("/")
-def index():
+@app.route("/") # Hard coding default route
+@app.route("/tree")
+def view_tree():
     """Displays tree view of tables within schemas.
     """
-    return render_template("index.html")
+    return render_template("tree.html")
 
 
 @app.route('/<object_type>')
@@ -40,7 +41,7 @@ def payload():
 
     nested_dd = []
     for s in schemas:
-        print(s)
+        #print(s)
         desc = (": " + s["description"]) if s["description"] else ""
         schema_string = f"{s['s_name']}{desc} <small>({s['size_plus_indexes']})</small>"
         s_data = {schema_string: []}
@@ -48,14 +49,14 @@ def payload():
             if t["s_name"] != s["s_name"]:
                 continue
             desc = (": " + t["description"]) if t["description"] else ""
-            table_string = (
-                f"{t['t_name']}{desc} <small>({t['size_plus_indexes']})</small>"
-            )
+            table_string = f"<strong>{t['t_name']}</strong>:" 
+            table_string += f" - <em>{t['size_plus_indexes']}, {t['rows']} rows</em> - "
+            table_string += desc
             t_data = {table_string: []}
             for c in columns:
                 if c["t_name"] != t["t_name"] or c["s_name"] != s["s_name"]:
                     continue
-                desc = (": " + c["description"]) if c["description"] else ""
+                desc = (" " + c["description"]) if c["description"] else ""
                 column_string = (
                     f"{c['column_name']}{desc} <small>({c['data_type']})</small>"
                 )

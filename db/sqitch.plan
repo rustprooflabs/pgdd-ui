@@ -3,3 +3,4 @@
 %uri=https://github.com/rustprooflabs/pgdd-ui
 
 001 2020-06-18T16:56:14Z Ryan Lambert <ryan@rustprooflabs.com> # Initial DB components.
+002 2020-08-09T16:37:36Z Ryan Lambert <ryan@rustprooflabs.com> # Returning estimated row count to table function.
