@@ -8,13 +8,16 @@ from webapp import config
 LOGGER = logging.getLogger(__name__)
 
 
-def get_dataframe(sql_raw):
+def get_dataframe(sql_raw, params=None):
     """Executes `sql_raw` and returns results as `Pandas.DataFrame`.
 
     Parameters
     ----------------
     sql_raw : str
         SQL query to execute.
+
+    params : dict
+        (Optional) Parameters to pass into query.
 
     Returns
     ----------------
@@ -32,7 +35,7 @@ def get_dataframe(sql_raw):
     if not conn:
         return False
 
-    results = pd.read_sql(sql_raw, conn)
+    results = pd.read_sql(sql_raw, conn, params=params)
     return results
 
 

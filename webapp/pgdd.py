@@ -1,4 +1,32 @@
+from flask import session
 from webapp import db
+
+
+def set_system_objects(system_objects=False):
+    """Sets system_objects flag in session.
+
+    Parameters
+    -------------------------
+    system_objects : bool
+    """
+    session['system_objects'] = system_objects
+
+def get_system_objects():
+    """Retrieves system_objects flag in session.
+
+    Uses default value from `set_system_objects()` if not
+    previously set.
+
+    Returns
+    -------------------------
+    system_objects : bool
+    """
+    system_objects = session.get('system_objects')
+    if system_objects is None:
+        set_system_objects()
+        system_objects = session.get('system_objects')
+
+    return system_objects
 
 def get_object_list(object_type):
     object_type = object_type.lower()
@@ -18,9 +46,11 @@ def get_object_list(object_type):
 def _schemas():
     """Queries database for schema level details.
     """
+    params = {'system_objects': get_system_objects()}
     sql_raw = 'SELECT * FROM dd_ui.get_schemas() '
+    sql_raw += ' WHERE system_object = %(system_objects)s'
     sql_raw += ' ORDER BY s_name'
-    return db.get_dataframe(sql_raw)
+    return db.get_dataframe(sql_raw, params)
 
 def _tables():
     """Queries database for table details.
