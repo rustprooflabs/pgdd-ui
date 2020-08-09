@@ -4,6 +4,7 @@ COMMENT ON ROLE dd_ui IS 'Group role to grant permissions needed by PgDD UI weba
 
 
 -- Login role for webapp access.
+-- DO NOT USE THIS PASSWORD!!!
 CREATE ROLE dd_ui_app
     WITH LOGIN PASSWORD 'UseGo0dPasswordsEverywhere'
     IN ROLE dd_ui;
