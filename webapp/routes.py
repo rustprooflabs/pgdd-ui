@@ -1,9 +1,21 @@
 import logging
-from flask import render_template, abort, jsonify
+from flask import render_template, abort, jsonify, request
 import psycopg2.extras
 from webapp import app, pgdd, db
 
 LOGGER = logging.getLogger(__name__)
+
+
+@app.route('/_toggle_system_objects')
+def toggle_system_objects():
+    system_objects = request.args.get('system_objects')
+
+    if system_objects.lower() == 'true':
+        pgdd.set_system_objects(True)
+    else:
+        pgdd.set_system_objects(False)
+
+    return jsonify({'status': 'success'})
 
 
 @app.route("/") # Hard coding default route
@@ -30,14 +42,10 @@ def view_schemas_list(object_type):
 
 @app.route("/dd.json")
 def payload():
-    with db.get_db_conn() as conn:
-        with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
-            cursor.execute("select * from dd_ui.get_columns() order by column_name")
-            columns = cursor.fetchall()
-            cursor.execute("select * from dd_ui.get_tables() order by t_name")
-            tables = cursor.fetchall()
-            cursor.execute("select * from dd_ui.get_schemas() order by s_name")
-            schemas = cursor.fetchall()
+    tree_data = pgdd.get_table_tree()
+    schemas = tree_data['schemas']
+    tables = tree_data['tables']
+    columns = tree_data['columns']
 
     nested_dd = []
     for s in schemas:

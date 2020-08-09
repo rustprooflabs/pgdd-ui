@@ -16,7 +16,7 @@ except KeyError:
 try:
     APP_DEBUG = os.environ['APP_DEBUG']
 except KeyError:
-    APP_DEBUG = True
+    APP_DEBUG = False
 
 
 # Required for CSRF protection in Flask, please set to something secret!
