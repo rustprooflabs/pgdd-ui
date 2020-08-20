@@ -1,3 +1,5 @@
+"""Configuration for PgDD UI.
+"""
 import os
 import logging
 
@@ -79,4 +81,3 @@ def get_db_string():
 
 
 DATABASE_STRING = get_db_string()
-

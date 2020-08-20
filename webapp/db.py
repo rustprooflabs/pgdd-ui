@@ -45,7 +45,7 @@ def _select_one(sql_raw, params):
 
 def _select_multi(sql_raw, params=None):
     """ Runs SELECT query that will return multiple (all) rows.
-    
+
     Parameters
     --------------------
     sql_raw : str
@@ -81,9 +81,7 @@ def _get_dataframe(sql_raw, params=None):
     try:
         conn = get_db_conn()
     except psycopg2.ProgrammingError as err:
-        LOGGER.error('Connection (%s) not configured properly.  Err: %s',
-                     connection_name,
-                     err)
+        LOGGER.error('Connection not configured properly.  Err: %s', err)
         return False
 
     if not conn:

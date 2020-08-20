@@ -20,9 +20,9 @@ HANDLER.setFormatter(FORMATTER)
 LOGGER.addHandler(HANDLER)
 
 if config.APP_DEBUG:
-	LOGGER.setLevel(logging.DEBUG)
+    LOGGER.setLevel(logging.DEBUG)
 else:
-	LOGGER.setLevel(logging.INFO)
+    LOGGER.setLevel(logging.INFO)
 
 from webapp import routes
 
