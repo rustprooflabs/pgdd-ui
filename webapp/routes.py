@@ -5,6 +5,13 @@ from webapp import app, pgdd, db
 
 LOGGER = logging.getLogger(__name__)
 
+@app.before_request
+def pgdd_version_check():
+    min_version = pgdd.min_supported_version()
+    pgdd_version = pgdd.version()
+    if pgdd_version < min_version:
+        abort(501)
+
 
 @app.route('/_toggle_system_objects')
 def toggle_system_objects():
@@ -81,4 +88,14 @@ def page_not_found(err):
     LOGGER.error('404 error: %s', err)
     return render_template('404.html'), 404
 
+@app.errorhandler(501)
+def outdated_pgdd_extension(err):
+    """ Handles errors of outdated extension as 501 http error code."""
+    min_version = pgdd.min_supported_version()
+    pgdd_version = pgdd.version()
+    msg = f'PgDD extension version {pgdd_version} outdated. '
+    msg += f'Requires at least {min_version}'
+    LOGGER.error(msg)
+    return render_template('501.html', min_version=min_version,
+                           pgdd_version=pgdd_version), 501
 

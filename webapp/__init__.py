@@ -1,7 +1,7 @@
 """ PgDD-UI __init__.py file """
 import logging
 from flask import Flask
-from webapp import config
+from webapp import config, pgdd
 
 # App settings
 app = Flask(__name__)
@@ -20,8 +20,12 @@ HANDLER.setFormatter(FORMATTER)
 LOGGER.addHandler(HANDLER)
 
 if config.APP_DEBUG:
-	LOGGER.setLevel(logging.DEBUG) # Change to set to different level
+	LOGGER.setLevel(logging.DEBUG)
 else:
 	LOGGER.setLevel(logging.INFO)
 
 from webapp import routes
+
+LOGGER.info('PgDD UI initialized')
+pgdd_version = pgdd.version()
+LOGGER.info(f'PgDD extension version: {pgdd_version.major}.{pgdd_version.minor}')

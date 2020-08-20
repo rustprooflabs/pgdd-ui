@@ -8,16 +8,40 @@ from webapp import config
 LOGGER = logging.getLogger(__name__)
 
 
-def get_data(sql_raw, params=None, return_format='DataFrame'):
+def get_data(sql_raw, params=None, return_format='DataFrame',
+             single_row=False):
     """Main query point for all read queries.
     """
     if return_format == 'RealDict':
-        return _select_multi(sql_raw, params)
+        if single_row:
+            return _select_one(sql_raw, params)
+        else:
+            return _select_multi(sql_raw, params)
 
     if return_format != 'DataFrame':
         msg = 'Unexpected return_format: %s.  Defaulting to DataFrame'
         LOGGER.warning(msg, return_format)
     return _get_dataframe(sql_raw, params)
+
+def _select_one(sql_raw, params):
+    """ Runs SELECT query that will return zero or 1 rows.
+    `params` is required but can be set to None if a LIMIT 1 is used.
+
+    Parameters
+    --------------------
+    sql_raw : str
+        Query string to execute.
+
+    params : dict
+        Parameters to pass into `sql_raw`
+
+    Returns
+    --------------------
+    results
+    """
+    results = _execute_query(sql_raw, params, 'sel_single')
+    return results
+
 
 def _select_multi(sql_raw, params=None):
     """ Runs SELECT query that will return multiple (all) rows.
@@ -124,6 +148,8 @@ def _execute_query(sql_raw, params, qry_type):
         cur.execute(sql_raw, params)
         if qry_type == 'sel_multi':
             results = cur.fetchall()
+        elif qry_type == 'sel_single':
+            results = cur.fetchone()
         else:
             raise Exception('Invalid query type defined.')
 

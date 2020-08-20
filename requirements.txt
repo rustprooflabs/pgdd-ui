@@ -3,6 +3,7 @@ Flask==1.1.2
 itsdangerous==1.1.0
 Jinja2==2.11.2
 MarkupSafe==1.1.1
+packaging==20.4
 pandas==1.0.5
 psycopg2==2.8.5
 psycopg2-binary==2.8.5
