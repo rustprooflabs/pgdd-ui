@@ -1,9 +1,44 @@
 import logging
 from flask import session
-from webapp import db
+from packaging.version import parse as parse_version
+from webapp import config, db
 
 
 LOGGER = logging.getLogger(__name__)
+
+
+def version():
+    """Returns the PgDD version installed in the connected database.
+
+    Returns
+    ------------------
+    version : packaging.version.Version
+        PgDD extension currently uses `version.major` and `version.minor`.
+        Complies to PEP 440 versioning.
+    """
+    if config.CHECK_PGDD_VERSION:
+        sql_raw = "SELECT extversion FROM pg_catalog.pg_extension "
+        sql_raw += " WHERE extname = 'pgdd' LIMIT 1;"
+        results = db.get_data(sql_raw, params=None,
+                              return_format='RealDict',
+                              single_row=True)
+        version = parse_version(results['extversion'])
+    else:
+        version = min_supported_version()
+        msg = 'PgDD version check disabled. Defaulting to min supported %s'
+        LOGGER.warn(msg, version)
+    return version
+
+def min_supported_version():
+    """Returns minimum supported version of PgDD for UI to function.
+
+    Returns
+    ------------------
+    version : packaging.version.Version
+    """
+    min_version = '0.3'
+    version = parse_version(min_version)
+    return version
 
 
 def set_system_objects(system_objects):

@@ -8,6 +8,10 @@ LOG_FORMAT = '%(levelname)s - %(asctime)s - %(name)s - %(message)s'
 
 LOGGER = logging.getLogger(__name__)
 
+# Set to False to disable version checking.
+# Useful for non-exension installs (e.g. PGaaS offerings)
+CHECK_PGDD_VERSION = True
+
 try:
     LOG_PATH = os.environ['LOG_PATH']
 except KeyError:

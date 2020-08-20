@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+{% block main_content %}
+
+
+<div class="container-fluid">
+
+<h1 class="row text-center">Outdated PgDD Extension version</h1>
+
+<p class="alert alert-danger text-center">
+    The version of PgDD extension in your database is not supported.
+</p>
+
+<div class="row text-center">
+
+Installed PgDD extension version: {{ pgdd_version }}
+<br />
+Minimum supported PgDD version: {{ min_version }}
+</div>
+
+</div>
+{% endblock main_content %}
