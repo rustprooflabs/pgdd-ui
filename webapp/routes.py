@@ -1,17 +1,23 @@
 import logging
-from flask import render_template, abort, jsonify, request
+from flask import abort, g, jsonify, render_template, request
 import psycopg2.extras
 from webapp import app, pgdd, db
 
 LOGGER = logging.getLogger(__name__)
 
+# Gather database level stats, restart app to refresh.
+DB_STATS = pgdd.DatabaseStats()
+
 @app.before_request
 def pgdd_version_check():
+    """Checks if PgDD extension will work with this webapp."""
     min_version = pgdd.min_supported_version()
     pgdd_version = pgdd.version()
     if pgdd_version < min_version:
         abort(501)
 
+    # Set DB_STATS to global object, makes always avaiable for footer.
+    g.db_stats = DB_STATS
 
 @app.route('/_toggle_system_objects')
 def toggle_system_objects():
@@ -25,7 +31,11 @@ def toggle_system_objects():
     return jsonify({'status': 'success'})
 
 
-@app.route("/") # Hard coding default route
+@app.route("/")
+def view_database_stats():
+    return render_template("database.html")
+
+
 @app.route("/tree")
 def view_tree():
     """Displays tree view of tables within schemas.

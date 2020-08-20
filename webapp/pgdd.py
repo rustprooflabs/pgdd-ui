@@ -173,3 +173,50 @@ def _functions(return_format):
     data = db.get_data(sql_raw, params, return_format)
     return data
 
+
+
+class DatabaseStats():
+    """Object representing database-level details."""
+    def __init__(self):
+        """Load details to attributes to avoid requerying too frequently.
+        """
+        self.pgdd_version = version()
+        self.pg_version_full = self.pg_version_full()
+        self.pg_version_short = self.pg_version_short()
+        self.pg_host = config.DB_HOST
+        self.pg_port = config.DB_PORT
+        self.pg_db = config.DB_NAME
+
+    def pg_version_full(self):
+        """Returns PostgreSQL version from `SELECT version()`
+
+        Example:
+            PostgreSQL 12.4 (Ubuntu 12.4-1.pgdg18.04+1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0, 64-bit
+
+        Returns
+        ------------------
+        version : str
+        """
+        sql_raw = "SELECT version();"
+        results = db.get_data(sql_raw, params=None,
+                              return_format='RealDict',
+                              single_row=True)
+        pg_version = results['version']
+        return pg_version
+
+    def pg_version_short(self):
+        """Returns shorter PostgreSQL version from `SHOW server_version;`
+
+        Example:
+            12.4 (Ubuntu 12.4-1.pgdg18.04+1)
+
+        Returns
+        ------------------
+        version : str
+        """
+        sql_raw = "SHOW server_version;"
+        results = db.get_data(sql_raw, params=None,
+                              return_format='RealDict',
+                              single_row=True)
+        pg_version = results['server_version']
+        return pg_version

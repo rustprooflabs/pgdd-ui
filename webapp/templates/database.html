@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+{% block main_content %}
+
+<div class="container-fluid">
+
+<h1 class="row justify-content-center">
+    PgDD Database Overview
+</h1>
+
+<h2 class="row justify-content-center">
+    Connection: {{ g.db_stats.pg_host }}:{{ g.db_stats.pg_port }}/{{ g.db_stats.pg_db }}
+</h2>
+
+<div class="row">
+    <div class="col-md-12 p-2">
+        <h2 class="row justify-content-center">
+            Versions
+        </h2>
+        <p class="row justify-content-center">
+            {{ g.db_stats.pg_version_full}}
+        </p>
+
+        <p class="row justify-content-center">
+            PgDD extension v{{ g.db_stats.pgdd_version }}
+        </p>
+    </div>
+
+    <div class="col-md-6">
+        <h2 class="row justify-content-center">
+            Size on Disk
+        </h2>
+        <p class="row justify-content-center">
+            Feature planned for PgDD 0.4
+        </p>
+
+    </div>
+</div>
+
+
+{% endblock main_content %}
