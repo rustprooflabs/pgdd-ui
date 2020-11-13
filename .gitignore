@@ -1,2 +1,3 @@
-webapp.log
+*.log
 webapp/__pycache__/
+_build/
