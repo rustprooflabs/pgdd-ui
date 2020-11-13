@@ -5,12 +5,10 @@ from pgdd_ui import pgdd, config
 def run():
     """Runs the pgdd_ui.builder module"""
     print("Running PgDD builder...")
-    db_stats = pgdd.DatabaseStats()
 
     _save_pgdd_data()
-    _print_db_stats(db_stats)
-    _build_db_index(db_stats)
-    _build_schema_list(db_stats)
+    _build_db_index()
+    _build_schema_list()
 
 
 def _print_db_stats(db_stats):
@@ -24,9 +22,16 @@ def _print_db_stats(db_stats):
     print(f"Postgres Version: {db_stats.pg_version_short}")
     print(f"PgDD Version: {db_stats.pgdd_version}")
 
+
 def _save_pgdd_data():
+    """Saves all PgDD data to JSON format in the directory `config.BUILD_PATH`.
+    """
+    db_stats = pgdd.DatabaseStats()
+    _print_db_stats(db_stats)
+
     out_dir = config.BUILD_PATH
     _ensure_dir_exists(out_dir)
+    db_stats.json()
     pgdd.schemas()
     pgdd.tables()
     pgdd.views()
@@ -34,14 +39,13 @@ def _save_pgdd_data():
     pgdd.columns()
 
 
-def _build_db_index(db_stats):
+def _build_db_index():
     template = config.J2_ENV.get_template('index.j2.html')
-
-    rendered = template.render(db_stats=db_stats)
+    rendered = template.render()
     save_rendered_template(out_name='index.html', content=rendered)
 
 
-def _build_schema_list(db_stats):
+def _build_schema_list():
     """Renders schema list page.
 
     Parameters
@@ -49,10 +53,7 @@ def _build_schema_list(db_stats):
     db_stats : pgdd.DatabaseStats
     """
     template = config.J2_ENV.get_template('schema_list.j2.html')
-
-    schemas = 'Coming soon!'
-    rendered = template.render(db_stats=db_stats,
-                               schemas=schemas)
+    rendered = template.render()
     save_rendered_template(out_name='schemas.html', content=rendered)
 
 

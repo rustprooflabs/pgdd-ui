@@ -1,7 +1,10 @@
-<div>
-    Generated from PostgreSQL DB: {{ db_stats.pg_host }}:{{ db_stats.pg_port }}/{{ db_stats.pg_db }}
-    <br />
-    PostgreSQL version: {{ db_stats.pg_version_short }}
-    -
-    PgDD extension v{{ db_stats.pgdd_version }}
+<div class="container-fluid">
+
+    <div class="row justify-content-center">
+        Generated from PostgreSQL DB: pg_host:pg_port/.pg_db
+        <br />
+        PostgreSQL version: pg_version_short
+        -
+        pgdd_version
+    </div>
 </div>

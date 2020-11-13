@@ -112,6 +112,6 @@ Activate venv and make environment vars available to Python.
 ```bash
 source ~/venv/pgdd/bin/activate
 cd /path/to/pgdd-ui
-env $(cat ~/.pgddui | grep -v ^# | xargs) python run_server.py
+env $(cat ~/.pgddui | grep -v ^# | xargs) python build.py
 ```
 

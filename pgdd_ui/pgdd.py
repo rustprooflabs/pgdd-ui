@@ -10,11 +10,24 @@ LOGGER = logging.getLogger(__name__)
 
 
 def save_json(data, out_name):
+    """Serializes data as JSON and saves javascript JSON.parse() to load as var.
+
+    Simply saving the JSON data and attempting to load via local paths will result in error such as:
+        Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at file:///path/to/pgdd-ui/_build/db_stats.json. (Reason: CORS request not http).
+
+    A major goal of this project is to provide a simple Data Dictionary output that is easy
+    to share regardless of the end user's technical abilities or access to a local Python development
+    environment.
+
+    See: https://stackoverflow.com/questions/48362093/cors-request-blocked-in-locally-opened-html
+    """
     out_dir = config.BUILD_PATH
-    data_out = json.dumps(data)
-    out_file = os.path.join(out_dir, out_name)
+    json_data = json.dumps(data)
+    js_string = f"var {out_name} = JSON.parse('{json_data}');"
+    out_filename = f'{out_name}.js'
+    out_file = os.path.join(out_dir, out_filename)
     with open(out_file, "w") as f:
-        f.write(data_out)
+        f.write(js_string)
 
 
 def version():
@@ -81,7 +94,7 @@ def schemas():
     sql_raw += ' ORDER BY s_name'
     params = None
     data = db.get_data(sql_raw, params)
-    save_json(data, 'schemas.json')
+    save_json(data, 'schemas')
 
 
 def tables():
@@ -92,7 +105,7 @@ def tables():
     sql_raw += ' ORDER BY s_name, t_name'
     params = None
     data = db.get_data(sql_raw, params)
-    save_json(data, 'tables.json')
+    save_json(data, 'tables')
 
 def views():
     """Queries database for view details.
@@ -102,7 +115,7 @@ def views():
     sql_raw += ' ORDER BY s_name, v_name'
     params = None
     data = db.get_data(sql_raw, params)
-    save_json(data, 'views.json')
+    save_json(data, 'views')
 
 
 def columns():
@@ -113,7 +126,7 @@ def columns():
     sql_raw += ' ORDER BY s_name, t_name, position'
     params = None
     data = db.get_data(sql_raw, params)
-    save_json(data, 'columns.json')
+    save_json(data, 'columns')
 
 def functions():
     """Queries database for function details.
@@ -123,12 +136,13 @@ def functions():
     sql_raw += ' ORDER BY s_name, f_name'
     params = None
     data = db.get_data(sql_raw, params)
-    save_json(data, 'functions.json')
+    save_json(data, 'functions')
 
 
 
 class DatabaseStats():
     """Object representing database-level details."""
+
     def __init__(self):
         """Load details to attributes to avoid requerying too frequently.
         """
@@ -170,3 +184,18 @@ class DatabaseStats():
                               single_row=True)
         pg_version = results['server_version']
         return pg_version
+
+    def json(self):
+        """Saves class attributes into db_stats for use.
+        """
+        # Cannot stuff the version object in, .public seems to be the best option.
+        pgdd_version = self.pgdd_version.public
+        data = {'pgdd_version': pgdd_version,
+                'pg_version_full': self.pg_version_full,
+                'pg_version_short': self.pg_version_short,
+                'pg_host': self.pg_host,
+                'pg_port': self.pg_port,
+                'pg_db': self.pg_db
+            }
+        save_json(data=data, out_name='db_stats')
+

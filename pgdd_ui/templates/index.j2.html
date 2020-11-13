@@ -7,8 +7,8 @@
     PgDD Database Overview
 </h1>
 
-<h2 class="row justify-content-center">
-    Connection: {{ db_stats.pg_host }}:{{ db_stats.pg_port }}/{{ db_stats.pg_db }}
+<h2 class="row justify-content-center" id="db_connection">
+    Loading.. Connection: pg_host:.pg_port.pg_db
 </h2>
 
 <div class="row">
@@ -17,16 +17,24 @@
             Versions
         </h2>
         <p class="row justify-content-center">
-            {{ db_stats.pg_version_full}}
+            pg_version_full coming soon
         </p>
 
         <p class="row justify-content-center">
-            PgDD extension v{{ db_stats.pgdd_version }}
+            pgdd_version coming soon
         </p>
     </div>
 
 
 </div>
 
+<script type="text/javascript" src="db_stats.js">
+</script>
+
+<script type="text/javascript">
+console.log('Hello!')
+
+console.log(db_stats)
+</script>
 
 {% endblock main_content %}
