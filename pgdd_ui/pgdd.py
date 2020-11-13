@@ -23,6 +23,7 @@ def save_json(data, out_name):
     """
     out_dir = config.BUILD_PATH
     json_data = json.dumps(data)
+
     js_string = f"var {out_name} = JSON.parse('{json_data}');"
     out_filename = f'{out_name}.js'
     out_file = os.path.join(out_dir, out_filename)
@@ -84,12 +85,7 @@ def get_table_tree():
 def schemas():
     """Queries database for schema level details.
     """
-    sql_raw = """SELECT s_name, description, table_count,
-                view_count, function_count,
-                size_pretty, size_plus_indexes,
-                size_bytes::FLOAT AS size_bytes, data_source, sensitive
-            FROM dd_ui.get_schemas()
-"""
+    sql_raw = 'SELECT * FROM dd_ui.get_schemas() '
     sql_raw += ' WHERE NOT system_object '
     sql_raw += ' ORDER BY s_name'
     params = None

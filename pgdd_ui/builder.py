@@ -9,6 +9,7 @@ def run():
     _save_pgdd_data()
     _build_db_index()
     _build_schema_list()
+    _build_table_list()
 
 
 def _print_db_stats(db_stats):
@@ -46,15 +47,20 @@ def _build_db_index():
 
 
 def _build_schema_list():
-    """Renders schema list page.
-
-    Parameters
-    -------------------------
-    db_stats : pgdd.DatabaseStats
+    """Renders schema listing page.
     """
     template = config.J2_ENV.get_template('schema_list.j2.html')
     rendered = template.render()
     save_rendered_template(out_name='schemas.html', content=rendered)
+
+
+def _build_table_list():
+    """Renders schema listing page.
+    """
+    template = config.J2_ENV.get_template('table_list.j2.html')
+    rendered = template.render()
+    save_rendered_template(out_name='tables.html', content=rendered)
+
 
 
 

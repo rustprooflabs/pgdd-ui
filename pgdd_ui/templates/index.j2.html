@@ -8,7 +8,7 @@
 </h1>
 
 <h2 class="row justify-content-center" id="db_connection">
-    Loading.. Connection: pg_host:.pg_port.pg_db
+    Database connection loading...
 </h2>
 
 <div class="row">
@@ -16,13 +16,8 @@
         <h2 class="row justify-content-center">
             Versions
         </h2>
-        <p class="row justify-content-center">
-            pg_version_full coming soon
-        </p>
-
-        <p class="row justify-content-center">
-            pgdd_version coming soon
-        </p>
+        <p class="row justify-content-center" id="pg_version_full"></p>
+        <p class="row justify-content-center" id="pgdd_version"></p>
     </div>
 
 
@@ -32,9 +27,14 @@
 </script>
 
 <script type="text/javascript">
-console.log('Hello!')
 
-console.log(db_stats)
+var db_conn_str = "Database: " + db_stats.pg_host + ":" + db_stats.pg_port + "/" + db_stats.pg_db
+
+document.getElementById("db_connection").innerHTML = db_conn_str;
+document.getElementById("pg_version_full").innerHTML = db_stats.pg_version_full;
+document.getElementById("pgdd_version").innerHTML = 'PgDD extension v. ' + db_stats.pgdd_version;
+
+
 </script>
 
 {% endblock main_content %}
