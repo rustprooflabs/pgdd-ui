@@ -1,27 +1,21 @@
 """ Database helper module to make interactions with psycopg2 easier. """
 import logging
 import psycopg2
-import pandas as pd
-from webapp import config
+import psycopg2.extras
+from pgdd_ui import config
 
 
 LOGGER = logging.getLogger(__name__)
 
 
-def get_data(sql_raw, params=None, return_format='DataFrame',
-             single_row=False):
+def get_data(sql_raw, params=None, single_row=False):
     """Main query point for all read queries.
     """
-    if return_format == 'RealDict':
-        if single_row:
-            return _select_one(sql_raw, params)
-        else:
-            return _select_multi(sql_raw, params)
+    if single_row:
+        return _select_one(sql_raw, params)
+    else:
+        return _select_multi(sql_raw, params)
 
-    if return_format != 'DataFrame':
-        msg = 'Unexpected return_format: %s.  Defaulting to DataFrame'
-        LOGGER.warning(msg, return_format)
-    return _get_dataframe(sql_raw, params)
 
 def _select_one(sql_raw, params):
     """ Runs SELECT query that will return zero or 1 rows.
@@ -61,34 +55,6 @@ def _select_multi(sql_raw, params=None):
     results = _execute_query(sql_raw, params, 'sel_multi')
     return results
 
-
-def _get_dataframe(sql_raw, params=None):
-    """Executes `sql_raw` and returns results as `Pandas.DataFrame`.
-
-    Parameters
-    ----------------
-    sql_raw : str
-        SQL query to execute.
-
-    params : dict
-        (Optional) Parameters to pass into query.
-
-    Returns
-    ----------------
-    results : pandas.DataFrame
-        Returns False if DB error.
-    """
-    try:
-        conn = get_db_conn()
-    except psycopg2.ProgrammingError as err:
-        LOGGER.error('Connection not configured properly.  Err: %s', err)
-        return False
-
-    if not conn:
-        return False
-
-    results = pd.read_sql(sql_raw, conn, params=params)
-    return results
 
 
 def get_db_conn():

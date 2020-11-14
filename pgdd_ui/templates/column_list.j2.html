@@ -1,0 +1,49 @@
+{% extends 'layout.html' %}
+{% block main_content %}
+
+<div class="container-fluid">
+
+    <h1>
+        Columns
+    </h1>
+
+    <div id="column-list">
+        Loading columns...
+    </div>
+
+</div>
+
+
+<script type="text/javascript" src="columns.js">
+</script>
+
+<script type="text/javascript">
+
+var list_html = `<table class="table table-striped table-hover">
+        <tr><th>Schema</th>
+            <th>Table Name</th>
+            <th>Column Name</th>
+            <th>Data type</th>
+            <th>Sensitive</th>
+            <th>Data source</th>
+            <th>Description</th>     
+        </tr>`;
+
+for (var i = 0; i < columns.length; i++){
+  var obj = columns[i];
+  list_html += '<tr><td>' + obj.s_name + '</td>';
+  list_html += '<td>' + obj.t_name + '</td>';
+  list_html += '<td>' + obj.column_name + '</td>';
+  list_html += '<td>' + obj.data_type + '</td>';
+  list_html += '<td>' + obj.sensitive + '</td>';
+  list_html += '<td>' + obj.data_source + '</td>';
+  list_html += '<td>' + obj.description + '</td></tr>';
+}
+
+list_html += '</table>';
+
+document.getElementById("column-list").innerHTML = list_html;
+
+</script>
+
+{% endblock main_content %}

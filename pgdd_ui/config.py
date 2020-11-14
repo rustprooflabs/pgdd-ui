@@ -2,6 +2,7 @@
 """
 import os
 import logging
+from jinja2 import Environment, FileSystemLoader
 
 CURR_PATH = os.path.abspath(os.path.dirname(__file__))
 PROJECT_BASE_PATH = os.path.abspath(os.path.join(CURR_PATH, os.pardir))
@@ -10,6 +11,17 @@ LOG_FORMAT = '%(levelname)s - %(asctime)s - %(name)s - %(message)s'
 
 LOGGER = logging.getLogger(__name__)
 
+templates_path = os.path.join(CURR_PATH, 'templates')
+J2_ENV = Environment(loader=FileSystemLoader(templates_path),                                                                                                                            
+                     trim_blocks=True)
+
+try:
+    BUILD_PATH = os.environ['PGDD_BUILD_PATH']
+except KeyError:
+    BUILD_PATH = os.path.join(PROJECT_BASE_PATH, '_build')
+
+print(f'PgDD building to {BUILD_PATH}')
+
 # Set to False to disable version checking.
 # Useful for non-exension installs (e.g. PGaaS offerings)
 CHECK_PGDD_VERSION = True
@@ -17,23 +29,12 @@ CHECK_PGDD_VERSION = True
 try:
     LOG_PATH = os.environ['LOG_PATH']
 except KeyError:
-    LOG_PATH = PROJECT_BASE_PATH + '/webapp.log'
+    LOG_PATH = PROJECT_BASE_PATH + '/pgdd-builder.log'
 
 try:
     APP_DEBUG = os.environ['APP_DEBUG']
 except KeyError:
     APP_DEBUG = False
-
-
-# Required for CSRF protection in Flask, please set to something secret!
-try:
-    APP_SECRET_KEY = os.environ['APP_SECRET_KEY']
-except KeyError:
-    ERR_MSG = '\nSECURITY WARNING: To ensure security please set the APP_SECRET_KEY'
-    ERR_MSG += ' environment variable.\n'
-    LOGGER.warning(ERR_MSG)
-    print(ERR_MSG)
-    APP_SECRET_KEY = '522ab51267576d482599d314304307c61cb03001d5593db74fce191fb399bf3b'
 
 
 try:

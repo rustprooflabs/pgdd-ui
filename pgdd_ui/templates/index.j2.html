@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+{% block main_content %}
+
+<div class="container-fluid">
+
+<h1 class="row justify-content-center">
+    PgDD Database Overview
+</h1>
+
+<h2 class="row justify-content-center" id="db_connection">
+    Database connection loading...
+</h2>
+
+<div class="row">
+    <div class="col-md-12 p-2">
+        <h2 class="row justify-content-center">
+            Versions
+        </h2>
+        <p class="row justify-content-center" id="pg_version_full"></p>
+        <p class="row justify-content-center" id="pgdd_version"></p>
+    </div>
+
+
+</div>
+
+<script type="text/javascript" src="db_stats.js">
+</script>
+
+<script type="text/javascript">
+
+var db_conn_str = "Database: " + db_stats.pg_host + ":" + db_stats.pg_port + "/" + db_stats.pg_db
+
+document.getElementById("db_connection").innerHTML = db_conn_str;
+document.getElementById("pg_version_full").innerHTML = db_stats.pg_version_full;
+document.getElementById("pgdd_version").innerHTML = 'PgDD extension v. ' + db_stats.pgdd_version;
+
+
+</script>
+
+{% endblock main_content %}

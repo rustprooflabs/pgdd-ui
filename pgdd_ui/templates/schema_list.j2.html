@@ -1,0 +1,51 @@
+{% extends 'layout.html' %}
+{% block main_content %}
+
+<div class="container-fluid">
+
+    <h1>
+        Schema Listing
+    </h1>
+
+    <div id="schema-table">
+        Loading schemas...
+    </div>
+
+</div>
+
+
+<script type="text/javascript" src="schemas.js">
+</script>
+
+<script type="text/javascript">
+
+var schema_html = `<table class="table table-striped table-hover">
+        <tr><th>Schema name</th>
+            <th># Tables</th>
+            <th># Views</th>
+            <th># Functions</th>
+            <th>Size (incl. Indexes)</th>
+            <th>Sensitive</th>
+            <th>Data source</th>
+            <th>Description</th>     
+        </tr>`;
+
+for (var i = 0; i < schemas.length; i++){
+  var obj = schemas[i];
+  schema_html += '<tr><td>' + obj.s_name + '</td>';
+  schema_html += '<td>' + obj.table_count + '</td>';
+  schema_html += '<td>' + obj.view_count + '</td>';
+  schema_html += '<td>' + obj.function_count + '</td>';
+  schema_html += '<td>' + obj.size_plus_indexes + '</td>';
+  schema_html += '<td>' + obj.sensitive + '</td>';
+  schema_html += '<td>' + obj.data_source + '</td>';
+  schema_html += '<td>' + obj.description + '</td></tr>';
+}
+
+schema_html += '</table>';
+
+document.getElementById("schema-table").innerHTML = schema_html;
+
+</script>
+
+{% endblock main_content %}

@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+{% block main_content %}
+
+<div class="container-fluid">
+
+    <h1>
+        Functions
+    </h1>
+
+    <div id="function-list">
+        Loading functions...
+    </div>
+
+</div>
+
+
+<script type="text/javascript" src="functions.js">
+</script>
+
+<script type="text/javascript">
+
+var list_html = `<table class="table table-striped table-hover">
+        <tr><th>Schema</th>
+            <th>Function Name</th>
+            <th>Argument data type(s)</th>
+            <th>Result data type(s)</th>
+            <th>Language</th>
+            <th>Description</th>     
+        </tr>`;
+
+for (var i = 0; i < functions.length; i++){
+  var obj = functions[i];
+  list_html += '<tr><td>' + obj.s_name + '</td>';
+  list_html += '<td>' + obj.f_name + '</td>';
+  list_html += '<td>' + obj.argument_data_types + '</td>';
+  list_html += '<td>' + obj.result_data_types + '</td>';
+  list_html += '<td>' + obj.proc_language + '</td>';
+  list_html += '<td>' + obj.description + '</td></tr>';
+}
+
+list_html += '</table>';
+
+document.getElementById("function-list").innerHTML = list_html;
+
+</script>
+
+{% endblock main_content %}

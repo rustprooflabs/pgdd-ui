@@ -1,14 +1,6 @@
-""" PgDD-UI __init__.py file """
+""" PgDD-UI site generator __init__.py file """
 import logging
-from flask import Flask
-from webapp import config, pgdd
-
-# App settings
-app = Flask(__name__)
-app.config['DEBUG'] = config.APP_DEBUG
-app.config['SECRET_KEY'] = config.APP_SECRET_KEY
-app.config['WTF_CSRF_ENABLED'] = True
-app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+from pgdd_ui import config, pgdd
 
 
 # Setup Logging
@@ -24,8 +16,6 @@ if config.APP_DEBUG:
 else:
     LOGGER.setLevel(logging.INFO)
 
-from webapp import routes
-
-LOGGER.info('PgDD UI initialized')
+LOGGER.info('PgDD UI builder initialized')
 pgdd_version = pgdd.version()
 LOGGER.info(f'PgDD extension version: {pgdd_version.major}.{pgdd_version.minor}')

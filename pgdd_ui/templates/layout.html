@@ -16,18 +16,13 @@
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
-
-    <script type=text/javascript>
-      $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
-    </script>
-
-    <!-- Prevents favicon requests, does not exists yet. -->
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <!-- Prevents favicon requests, does not exist yet. -->
     <link rel="icon" href="data:,">
 
 </head>
 
-<body>
+<body onload="onLoad()">
     <div class="page">
         {% block body %}
             <div class="header'">
