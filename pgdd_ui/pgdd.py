@@ -1,4 +1,5 @@
 import os
+import datetime
 import logging
 import json
 from flask import session
@@ -167,6 +168,7 @@ class DatabaseStats():
         self.pg_host = config.DB_HOST
         self.pg_port = config.DB_PORT
         self.pg_db = config.DB_NAME
+        self.generated_at = self.tstamp()
 
     def pg_version_full(self):
         """Returns PostgreSQL version from `SELECT version()`
@@ -210,7 +212,12 @@ class DatabaseStats():
                 'pg_version_short': self.pg_version_short,
                 'pg_host': self.pg_host,
                 'pg_port': self.pg_port,
-                'pg_db': self.pg_db
+                'pg_db': self.pg_db,
+                'generated_at': self.generated_at
             }
         save_json(data=data, out_name='db_stats')
 
+    def tstamp(self):
+        now = datetime.datetime.now()
+        formatted = date_time = now.strftime("%m/%d/%Y %H:%M:%S")
+        return formatted
