@@ -49,5 +49,46 @@ AS $function$
     $function$
 ;
 
+DROP FUNCTION dd_ui.get_columns();
+CREATE FUNCTION dd_ui.get_columns()
+ RETURNS TABLE(type text, s_name name, t_name name, "position" smallint,
+    column_name name, data_type name, description text, data_source text,
+    sensitive boolean, system_object boolean)
+ LANGUAGE sql
+ SECURITY DEFINER
+ SET search_path TO 'dd_ui, pg_temp'
+AS $function$
+
+        SELECT type, s_name, t_name, position, column_name, data_type, 
+                REPLACE(REPLACE(description, '''', ''), '"', '') AS description,
+                data_source, sensitive,
+                system_object
+            FROM dd.columns
+        ;
+
+    $function$
+;
+
+
+CREATE OR REPLACE FUNCTION dd_ui.get_functions()
+ RETURNS TABLE(s_name name, f_name name, result_data_types text, argument_data_types text, proc_security text, access_privileges text, proc_language name, description text, system_object boolean)
+ LANGUAGE sql
+ SECURITY DEFINER
+ SET search_path TO 'dd_ui, pg_temp'
+AS $function$
+
+        SELECT s_name, f_name,
+                REPLACE(REPLACE(result_data_types, '''', ''), '"', '') AS result_data_types,
+                REPLACE(REPLACE(argument_data_types, '''', ''), '"', '') AS argument_data_types,
+                proc_security, 
+                access_privileges, proc_language,
+                regexp_replace(REPLACE(REPLACE(description, '''', ''), '"', ''), E'[\\n\\r\\t]+', ' ', 'g' ) AS description,
+                system_object
+            FROM dd.functions 
+        ;
+
+    $function$
+;
+
 
 COMMIT;

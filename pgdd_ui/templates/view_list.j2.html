@@ -1,0 +1,51 @@
+{% extends 'layout.html' %}
+{% block main_content %}
+
+<div class="container-fluid">
+
+    <h1>
+        Views
+    </h1>
+
+    <div id="view-list">
+        Loading views...
+    </div>
+
+</div>
+
+
+<script type="text/javascript" src="views.js">
+</script>
+
+<script type="text/javascript">
+
+var list_html = `<table class="table table-striped table-hover">
+        <tr><th>Schema</th>
+            <th>View Name</th>
+            <th>Type</th>
+            <th>Rows</th>
+            <th>Size plus indexes</th>
+            <th>Sensitive</th>
+            <th>Data source</th>
+            <th>Description</th>     
+        </tr>`;
+
+for (var i = 0; i < views.length; i++){
+  var obj = views[i];
+  list_html += '<tr><td>' + obj.s_name + '</td>';
+  list_html += '<td>' + obj.v_name + '</td>';
+  list_html += '<td>' + obj.type + '</td>';
+  list_html += '<td>' + obj.rows + '</td>';
+  list_html += '<td>' + obj.size_plus_indexes + '</td>';
+  list_html += '<td>' + obj.sensitive + '</td>';
+  list_html += '<td>' + obj.data_source + '</td>';
+  list_html += '<td>' + obj.description + '</td></tr>';
+}
+
+list_html += '</table>';
+
+document.getElementById("view-list").innerHTML = list_html;
+
+</script>
+
+{% endblock main_content %}
