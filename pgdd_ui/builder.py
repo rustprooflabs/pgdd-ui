@@ -1,5 +1,6 @@
 """PgDD UI Builder module."""
 import os
+import shutil
 from pgdd_ui import pgdd, config
 
 def run():
@@ -13,6 +14,8 @@ def run():
     _build_view_list()
     _build_column_list()
     _build_function_list()
+    _build_table_tree()
+    _copy_css()
 
 
 def _print_db_stats(db_stats):
@@ -41,6 +44,7 @@ def _save_pgdd_data():
     pgdd.views()
     pgdd.functions()
     pgdd.columns()
+    pgdd.table_tree()
 
 
 def _build_db_index():
@@ -86,6 +90,16 @@ def _build_function_list():
     rendered = template.render()
     save_rendered_template(out_name='functions.html', content=rendered)
 
+def _build_table_tree():
+    template = config.J2_ENV.get_template('table_tree.j2.html')
+    rendered = template.render()
+    save_rendered_template(out_name='table_tree.html', content=rendered)
+
+def _copy_css():
+    filename = 'style.css'
+    css_source = os.path.join(config.CURR_PATH, 'templates', filename)
+    css_target = os.path.join(config.BUILD_PATH, filename)
+    shutil.copyfile(css_source, css_target)
 
 def save_rendered_template(out_name, content):
     """Saves rendered `content` to build directory in `out_name` file.

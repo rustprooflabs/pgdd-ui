@@ -19,6 +19,10 @@
 </div>
 
 
+
+<script type="text/javascript" src="table_tree.js">
+</script>
+
 <script>
   var selected;
   var showFocus = function () {
@@ -78,9 +82,7 @@
     showFocus();
   };
   var onLoad = function () {
-    fetch("dd.json")
-      .then((response) => response.json())
-      .then((data) => renderPayload(data));
+    renderPayload(table_tree);
   };
 
   var renderPayload = function (payload) {

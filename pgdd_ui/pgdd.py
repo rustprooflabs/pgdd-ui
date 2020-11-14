@@ -64,24 +64,6 @@ def min_supported_version():
     return version
 
 
-
-def get_table_tree():
-    """Runs multiple queries to collect data for tree display.
-
-    Returns
-    ---------------------
-    data : dict
-        Keys: schemas, tables, columns
-    """
-    schemas = get_object_list('schemas', return_format='RealDict')
-    print(f'Type: schemas {type(schemas)}')
-    tables = get_object_list('tables', return_format='RealDict')
-    columns = get_object_list('columns', return_format='RealDict')
-    data = {'schemas': schemas,
-            'tables': tables,
-            'columns': columns}
-    return data
-
 def schemas():
     """Queries database for schema level details.
     """
@@ -91,6 +73,7 @@ def schemas():
     params = None
     data = db.get_data(sql_raw, params)
     save_json(data, 'schemas')
+    return data
 
 
 def tables():
@@ -102,6 +85,7 @@ def tables():
     params = None
     data = db.get_data(sql_raw, params)
     save_json(data, 'tables')
+    return data
 
 def views():
     """Queries database for view details.
@@ -112,6 +96,7 @@ def views():
     params = None
     data = db.get_data(sql_raw, params)
     save_json(data, 'views')
+    return data
 
 
 def columns():
@@ -123,6 +108,7 @@ def columns():
     params = None
     data = db.get_data(sql_raw, params)
     save_json(data, 'columns')
+    return data
 
 def functions():
     """Queries database for function details.
@@ -133,7 +119,40 @@ def functions():
     params = None
     data = db.get_data(sql_raw, params)
     save_json(data, 'functions')
+    return data
 
+
+def table_tree():
+    schema_data = schemas()
+    table_data = tables()
+    column_data = columns()
+
+    nested_dd = []
+    for s in schema_data:
+        #print(s)
+        desc = (": " + s["description"]) if s["description"] else ""
+        schema_string = f"{s['s_name']}{desc} <small>({s['size_plus_indexes']})</small>"
+        s_data = {schema_string: []}
+        for t in table_data:
+            if t["s_name"] != s["s_name"]:
+                continue
+            desc = (": " + t["description"]) if t["description"] else ""
+            table_string = f"<strong>{t['t_name']}</strong>:" 
+            table_string += f" - <em>{t['size_plus_indexes']}, {t['rows']} rows</em> - "
+            table_string += desc
+            t_data = {table_string: []}
+            for c in column_data:
+                if c["t_name"] != t["t_name"] or c["s_name"] != s["s_name"]:
+                    continue
+                desc = (" " + c["description"]) if c["description"] else ""
+                column_string = (
+                    f"{c['column_name']}{desc} <small>({c['data_type']})</small>"
+                )
+                t_data[table_string].append(column_string)
+            s_data[schema_string].append(t_data)
+        nested_dd.append(s_data)
+
+    save_json(nested_dd, 'table_tree')
 
 
 class DatabaseStats():
