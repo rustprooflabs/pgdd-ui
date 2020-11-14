@@ -124,6 +124,10 @@ def functions():
 
 
 def table_tree():
+    """Generates the table tree structure.
+
+    FIXME: Figure out how to build this data better, too much HTML mixed in here.
+    """
     schema_data = schemas()
     table_data = tables()
     column_data = columns()
@@ -218,6 +222,13 @@ class DatabaseStats():
         save_json(data=data, out_name='db_stats')
 
     def tstamp(self):
+        """Formats timestamp for display in the footer.
+
+        Returns
+        --------------------
+        formatted : str
+            Formatted timestamp in mm/dd/YYYY HH:MM:SS format.
+        """
         now = datetime.datetime.now()
         formatted = date_time = now.strftime("%m/%d/%Y %H:%M:%S")
         return formatted

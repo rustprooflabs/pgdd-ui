@@ -1,44 +1,38 @@
 # PgDD-UI
 
-User interface to provide a user-friendly, non-SQL interface to the PostgreSQL Data Dictionary (PgDD) extension.
+Generates Postgres Data Dictionary as static website using the
+[PgDD extension](https://github.com/rustprooflabs/pgdd).
+Provides documentation covering schemas, tables, views, functions and columns
+in a user-friendly, SQL-not-required interface.  This makes sharing the database's
+documentation with all business users a breeze.
 
-## Deployment Instructions
 
-### PgDD in Docker
+## Requirements
 
-The PgDD extension is packaged in a Docker image
-for easy testing and deployment.
-
-```
-docker pull rustprooflabs/pgdd
-```
-
-The default (`latest`) version uses PostgreSQL 12.
-To pull a specific Postgres version use the tag.
+Requires PostgreSQL with the [PgDD (v0.3+) extension installed](https://github.com/rustprooflabs/pgdd).  The PgDD extension is installed per-database (true for all
+Postgres extensions) so the PgDD-UI is also scoped per-database.
 
 ```
-docker pull rustprooflabs/pgdd:pg13-beta2
+psql -c "CREATE DATABASE dd_dev;"
+psql -d dd_dev -c "CREATE EXTENSION IF NOT EXISTS pgdd;"
 ```
 
-Run a container with PgDD available, this uses port `6512`.
-
-```
-docker run --name test-pgdd -e POSTGRES_PASSWORD=mysecretpassword -p 6512:5432 -d rustprooflabs/pgdd
-```
+Python 3.7+ should work.
 
 
-### DB Development
+## Deploy Additional UI requirements
 
-The webapp uses functions in the `dd_ui` schema to allow
-easily controlling webapp permissions to the PgDD schema
+The PgDD UI generator requires additional database funtions in the ``dd_ui`` schema
+to allow easily controlling webapp permissions to the PgDD schema
 without interfering with any other permissions within
 the database.
+
+Uses [sqitch](https://sqitch.org/) for deployments.
+
 
 ```
 sudo apt install sqitch
 cd /path/to/pgdd-ui/db
-psql -c "CREATE DATABASE dd_dev;"
-psql -d dd_dev -c "CREATE EXTENSION IF NOT EXISTS pgdd;"
 sqitch deploy db:pg:dd_dev
 ```
 
@@ -48,31 +42,25 @@ Example of deploying to non-local Postgres instance.
 sqitch deploy db:pg://your_db_user@db_host_or_ip/dd_dev
 ```
 
-#### DB Roles
+## DB Roles
 
-See `db/permissions/roles.sql`
-and `db/permissions/perms_dd_ui.sql` for
-an example.
+Create a role for PgDD UI to use.  See `db/permissions/roles.sql`
+and CHANGE THE PASSWORD!  The roles script creates Postgres group role `dd_ui`
+and `dd_ui_app` login role in `dd_ui` group.
 
-`roles.sql` creates Postgres group role `dd_ui` and `dd_ui_app` login role in `dd_ui` group.
-`perms_dd_ui.sql` applies permissions to group role.
+> Do NOT run the `roles.sql` script as-is and use the password included in this PUBLIC repo!
 
-Run once:
-
-```
-psql -d dd_dev -f db/permissions/roles.sql
-```
-
+Run `perms_dd_ui.sql` to apply permissions to the group role.
 Run when needed.
 
 ```
 psql -d dd_dev -f db/permissions/perms_dd_ui.sql
 ```
 
-### App Development
+## Run PgDD-UI
 
-Assumes Python envs are saved under `~/venv` and git repo is
-linked via VirtualBox shared folder path `/media/sf_git/pgdd-ui`.
+These instructions assume saving Python 3.7+ envs under `~/venv` and this project's
+git repo is at an arbitrary `/path/to/pgdd-ui`.
 
 
 ```bash
@@ -98,16 +86,18 @@ chmod 0600 ~/.pgddui
 nano ~/.pgddui
 ```
 
-Define the DB connection values.
+Define the DB connection values and path to build.  `PGDD_BUILD_PATH` is optional,
+leaving it out will build to a local `_build` path. 
 
 ```
 DB_HOST=pg_host_or_ip
 DB_NAME=dd_dev
 DB_USER=dd_ui_app
 DB_PW=UseGo0dPasswordsEverywhere
+PGDD_BUILD_PATH=/data/pgdd/dd_dev
 ```
 
-Activate venv and make environment vars available to Python.
+Activate venv and make environment vars available to Python.  Build the site.
 
 ```bash
 source ~/venv/pgdd/bin/activate

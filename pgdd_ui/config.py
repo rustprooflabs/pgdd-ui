@@ -15,8 +15,12 @@ templates_path = os.path.join(CURR_PATH, 'templates')
 J2_ENV = Environment(loader=FileSystemLoader(templates_path),                                                                                                                            
                      trim_blocks=True)
 
-BUILD_PATH = os.path.join(PROJECT_BASE_PATH, '_build')
+try:
+    BUILD_PATH = os.environ['PGDD_BUILD_PATH']
+except KeyError:
+    BUILD_PATH = os.path.join(PROJECT_BASE_PATH, '_build')
 
+print(f'PgDD building to {BUILD_PATH}')
 
 # Set to False to disable version checking.
 # Useful for non-exension installs (e.g. PGaaS offerings)
