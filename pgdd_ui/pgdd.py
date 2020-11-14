@@ -2,7 +2,6 @@ import os
 import datetime
 import logging
 import json
-from flask import session
 from packaging.version import parse as parse_version
 from pgdd_ui import config, db
 
