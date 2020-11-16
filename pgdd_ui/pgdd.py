@@ -159,6 +159,41 @@ def table_tree():
     save_json(nested_dd, 'table_tree')
 
 
+def view_tree():
+    """Generates the table tree structure.
+
+    FIXME: Figure out how to build this data better, too much HTML mixed in here.
+    """
+    schema_data = schemas()
+    table_data = views()
+    column_data = columns()
+
+    nested_dd = []
+    for s in schema_data:
+        #print(s)
+        desc = (": " + s["description"]) if s["description"] else ""
+        schema_string = f"{s['s_name']}{desc}"
+        s_data = {schema_string: []}
+        for t in table_data:
+            if t["s_name"] != s["s_name"]:
+                continue
+            desc = (": " + t["description"]) if t["description"] else ""
+            table_string = f"<strong>{t['v_name']}</strong>:" 
+            table_string += desc
+            t_data = {table_string: []}
+            for c in column_data:
+                if c["t_name"] != t["v_name"] or c["s_name"] != s["s_name"]:
+                    continue
+                desc = (" " + c["description"]) if c["description"] else ""
+                column_string = (
+                    f"{c['column_name']}{desc} <small>({c['data_type']})</small>"
+                )
+                t_data[table_string].append(column_string)
+            s_data[schema_string].append(t_data)
+        nested_dd.append(s_data)
+
+    save_json(nested_dd, 'view_tree')
+
 class DatabaseStats():
     """Object representing database-level details."""
 
