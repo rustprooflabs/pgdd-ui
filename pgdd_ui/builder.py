@@ -15,6 +15,7 @@ def run():
     _build_column_list()
     _build_function_list()
     _build_table_tree()
+    _build_view_tree()
     _copy_css()
 
 
@@ -45,6 +46,7 @@ def _save_pgdd_data():
     pgdd.functions()
     pgdd.columns()
     pgdd.table_tree()
+    pgdd.view_tree()
 
 
 def _build_db_index():
@@ -94,6 +96,11 @@ def _build_table_tree():
     template = config.J2_ENV.get_template('table_tree.j2.html')
     rendered = template.render()
     save_rendered_template(out_name='table_tree.html', content=rendered)
+
+def _build_view_tree():
+    template = config.J2_ENV.get_template('view_tree.j2.html')
+    rendered = template.render()
+    save_rendered_template(out_name='view_tree.html', content=rendered)
 
 def _copy_css():
     filename = 'style.css'
