@@ -60,15 +60,7 @@ def _select_multi(sql_raw, params=None):
 def get_db_conn():
     """Establishes psycopg2 database connection."""
     db_string = config.DATABASE_STRING
-
-    try:
-        conn = psycopg2.connect(db_string)
-        config.DB_CONN_AVAILABLE = True
-    except psycopg2.OperationalError as err:
-        config.DB_CONN_AVAILABLE = False
-        err_msg = 'Database connection error.  Error: {}'.format(err)
-        LOGGER.error(err_msg)
-        return False
+    conn = psycopg2.connect(db_string)
     return conn
 
 
