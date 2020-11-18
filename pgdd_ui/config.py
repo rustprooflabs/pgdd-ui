@@ -42,25 +42,22 @@ try:
                                         os.environ['DB_NAME'],
                                         os.environ['DB_USER'],
                                         os.environ['DB_PW'])
-    DB_CONN_AVAILABLE = True
 except KeyError:
-    DB_CONN_AVAILABLE = False
     key_msg = ('Database environment variables not set.'
                'All values are required for proper operation.\n'
                'DB_HOST\nDB_NAME\nDB_USER\nDB_PW\n')
     print(key_msg)
     DB_HOST, DB_NAME, DB_USER, DB_PW = ('127.0.0.1', 'NotSet', 'Invalid', 'Invalid')
 
-if DB_CONN_AVAILABLE:
-    try:
-        DB_PORT = os.environ['DB_PORT']
-    except KeyError:
-        DB_PORT = 5432
 
-    MSG = 'DB conn configured. Host: {}; Name: {}; User: {}; Port: {}'
-    print(MSG.format(DB_HOST, DB_NAME, DB_USER, DB_PORT))
-else:
-    DB_PORT = None
+try:
+    DB_PORT = os.environ['DB_PORT']
+except KeyError:
+    DB_PORT = 5432
+
+
+MSG = 'DB conn configured. Host: {}; Name: {}; User: {}; Port: {}'
+print(MSG.format(DB_HOST, DB_NAME, DB_USER, DB_PORT))
 
 
 def get_db_string():
