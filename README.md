@@ -6,10 +6,12 @@ Provides documentation covering schemas, tables, views, functions and columns
 in a user-friendly, SQL-not-required interface.  This makes sharing the database's
 documentation with all business users a breeze.
 
+> Warning: Breaking changes made after commit `b256da7` (v0.2) in order to better support PgDD v0.4 (pgx rewrite).  Use `sqitch revert` to remove the legacy PgDD-UI database objects and re-deploy from scratch.
+
 
 ## Requirements
 
-Requires PostgreSQL with the [PgDD (v0.3+) extension installed](https://github.com/rustprooflabs/pgdd).  The PgDD extension is installed per-database (true for all
+Requires PostgreSQL with the [PgDD (v0.4+) extension installed](https://github.com/rustprooflabs/pgdd).  The PgDD extension is installed per-database (true for all
 Postgres extensions) so the PgDD-UI is also scoped per-database.
 
 ```
