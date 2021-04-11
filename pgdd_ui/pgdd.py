@@ -108,7 +108,7 @@ def columns():
     """
     sql_raw = 'SELECT * FROM dd_ui.get_columns() '
     sql_raw += ' WHERE NOT system_object '
-    sql_raw += ' ORDER BY s_name, t_name, position'
+    sql_raw += ' ORDER BY s_name, source_type, t_name, position'
     params = None
     data = db.get_data(sql_raw, params)
     save_json(data, 'columns')
