@@ -74,8 +74,8 @@ BEGIN;
 
 
     CREATE FUNCTION dd_ui.get_columns()
-     RETURNS TABLE(type TEXT, s_name NAME, t_name NAME, "position" SMALLINT,
-        column_name NAME, data_type NAME,
+     RETURNS TABLE(source_type TEXT, s_name NAME, t_name NAME, "position" SMALLINT,
+        c_name NAME, data_type NAME,
         description TEXT, data_source TEXT, sensitive BOOLEAN,
         system_object BOOLEAN)
      LANGUAGE sql
@@ -83,7 +83,7 @@ BEGIN;
      SET search_path TO 'dd_ui, pg_temp'
     AS $function$
 
-        SELECT type, s_name, t_name, position, column_name, data_type, 
+        SELECT source_type, s_name, t_name, position, c_name, data_type,
                 description, data_source, sensitive,
                 system_object
             FROM dd.columns

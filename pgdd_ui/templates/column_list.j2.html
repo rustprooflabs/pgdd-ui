@@ -21,6 +21,7 @@
 
 var list_html = `<table class="table table-striped table-hover">
         <tr><th>Schema</th>
+            <th>Source Type</th>
             <th>Table Name</th>
             <th>Column Name</th>
             <th>Data type</th>
@@ -32,8 +33,9 @@ var list_html = `<table class="table table-striped table-hover">
 for (var i = 0; i < columns.length; i++){
   var obj = columns[i];
   list_html += '<tr><td>' + obj.s_name + '</td>';
+  list_html += '<td>' + obj.source_type + '</td>';
   list_html += '<td>' + obj.t_name + '</td>';
-  list_html += '<td>' + obj.column_name + '</td>';
+  list_html += '<td>' + obj.c_name + '</td>';
   list_html += '<td>' + obj.data_type + '</td>';
   list_html += '<td>' + obj.sensitive + '</td>';
   list_html += '<td>' + obj.data_source + '</td>';

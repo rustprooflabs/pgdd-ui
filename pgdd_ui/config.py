@@ -23,7 +23,7 @@ except KeyError:
 print(f'PgDD building to {BUILD_PATH}')
 
 # Set to False to disable version checking.
-# Useful for non-exension installs (e.g. PGaaS offerings)
+# Useful for non-exension installs (e.g. PGaaS offerings from custom raw-SQL install)
 CHECK_PGDD_VERSION = True
 
 try:
