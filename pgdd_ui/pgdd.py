@@ -23,7 +23,8 @@ def save_json(data, out_name):
     """
     out_dir = config.BUILD_PATH
     json_data = json.dumps(data)
-
+    # Fix issue with single quotes in descriptions
+    json_data = json_data.replace("'", "&#39;")
     js_string = f"var {out_name} = JSON.parse('{json_data}');"
     out_filename = f'{out_name}.js'
     out_file = os.path.join(out_dir, out_filename)
