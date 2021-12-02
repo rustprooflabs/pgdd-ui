@@ -22,13 +22,13 @@ AS $function$
 
 DROP FUNCTION dd_ui.get_columns();
 CREATE FUNCTION dd_ui.get_columns()
- RETURNS TABLE(type text, s_name name, t_name name, "position" smallint, column_name name, data_type name, description text, data_source text, sensitive boolean, system_object boolean)
+ RETURNS TABLE(source_type text, s_name name, t_name name, "position" smallint, c_name name, data_type name, description text, data_source text, sensitive boolean, system_object boolean)
  LANGUAGE sql
  SECURITY DEFINER
  SET search_path TO 'dd_ui, pg_temp'
 AS $function$
 
-        SELECT type, s_name, t_name, position, column_name, data_type, 
+        SELECT source_type, s_name, t_name, position, c_name, data_type,
                 description, data_source, sensitive,
                 system_object
             FROM dd.columns

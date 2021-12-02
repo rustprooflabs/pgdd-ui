@@ -23,7 +23,8 @@ def save_json(data, out_name):
     """
     out_dir = config.BUILD_PATH
     json_data = json.dumps(data)
-
+    # Fix issue with single quotes in descriptions
+    json_data = json_data.replace("'", "&#39;")
     js_string = f"var {out_name} = JSON.parse('{json_data}');"
     out_filename = f'{out_name}.js'
     out_file = os.path.join(out_dir, out_filename)
@@ -40,14 +41,18 @@ def version():
         PgDD extension currently uses `version.major` and `version.minor`.
         Complies to PEP 440 versioning.
     """
+    min_version = min_supported_version()
     if config.CHECK_PGDD_VERSION:
         sql_raw = "SELECT extversion FROM pg_catalog.pg_extension "
         sql_raw += " WHERE extname = 'pgdd' LIMIT 1;"
         results = db.get_data(sql_raw, params=None,
                               single_row=True)
         version = parse_version(results['extversion'])
+        if version < min_version:
+            old_vers_err = f'The PgDD extension is outdated.  Version {version} installed, v{min_version} required.'
+            raise RuntimeError(old_vers_err)
     else:
-        version = min_supported_version()
+        version = min_version
         msg = 'PgDD version check disabled. Defaulting to min supported %s'
         LOGGER.warn(msg, version)
     return version
@@ -59,7 +64,7 @@ def min_supported_version():
     ------------------
     version : packaging.version.Version
     """
-    min_version = '0.3'
+    min_version = '0.4.0-dev'
     version = parse_version(min_version)
     return version
 
@@ -104,7 +109,7 @@ def columns():
     """
     sql_raw = 'SELECT * FROM dd_ui.get_columns() '
     sql_raw += ' WHERE NOT system_object '
-    sql_raw += ' ORDER BY s_name, t_name, position'
+    sql_raw += ' ORDER BY s_name, source_type, t_name, position'
     params = None
     data = db.get_data(sql_raw, params)
     save_json(data, 'columns')
@@ -150,7 +155,7 @@ def table_tree():
                     continue
                 desc = (" " + c["description"]) if c["description"] else ""
                 column_string = (
-                    f"{c['column_name']}{desc} <small>({c['data_type']})</small>"
+                    f"{c['c_name']}{desc} <small>({c['data_type']})</small>"
                 )
                 t_data[table_string].append(column_string)
             s_data[schema_string].append(t_data)
@@ -186,7 +191,7 @@ def view_tree():
                     continue
                 desc = (" " + c["description"]) if c["description"] else ""
                 column_string = (
-                    f"{c['column_name']}{desc} <small>({c['data_type']})</small>"
+                    f"{c['c_name']}{desc} <small>({c['data_type']})</small>"
                 )
                 t_data[table_string].append(column_string)
             s_data[schema_string].append(t_data)
